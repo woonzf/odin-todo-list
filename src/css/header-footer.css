@@ -1,0 +1,19 @@
+.header,
+.footer {
+    background-color: var(--color-header);
+    color: white;
+}
+
+.header {
+    padding: 0 10vw;
+    font-size: 1.2rem;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 1rem;
+}
+
+.header > div:nth-of-type(1) {
+    margin-top: 0.1rem;
+}
