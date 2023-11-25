@@ -17,4 +17,15 @@ function createDivAndAppend(...content) {
     return div;
 }
 
+function getTodayDate() {
+    const date = new Date();
+    const monthList = ["January", "February", "March", "April", "May", "June",
+        "July", "August", "September", "October", "November", "December"];
+    
+    const day = date.getDate();
+    const month = monthList[date.getMonth()].toUpperCase();
+    const year = date.getFullYear();
+    return `${day} ${month} ${year}`;
+}
+
 export { createText, createImg, createDivAndAppend }

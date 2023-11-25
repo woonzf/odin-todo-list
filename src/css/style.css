@@ -1,8 +1,27 @@
+@font-face {
+    font-family: 'Varela Round';
+    src: url(../font/VarelaRound-Regular.ttf);
+}
+
 :root {
-    --color-header: #18181b;
+    --color-side-bar: #e0f2fe;
+    --color-main: #f0f9ff;
+    --color-brand: #0ea5e9;
+    --color-select: #bae6fd;
+    --font-content: 'Varela Round';
 }
 
 * {
     margin: 0;
     padding: 0;
+}
+
+li {
+    list-style: none;
+}
+
+#content {
+    font-family: var(--font-content);
+    display: grid;
+    grid-template-columns: 1fr 4fr;
 }

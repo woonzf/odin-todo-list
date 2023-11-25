@@ -1,19 +1,20 @@
 import './css/style.css';
-import './css/header-footer.css';
+import './css/side-bar.css';
+import './css/main.css';
 
-import { header } from '../src/js/header';
+import { sideBar } from '../src/js/side-bar';
+import { main } from './js/main';
 
 const page = (() => {
+    const content = document.querySelector("#content");
+
     function init() {
         document.title = "Todo List";
-        render(".header", header.create());
+        content.append(sideBar.init(), main.init());
     }
 
-    function render(selector, content) {
-        const element = document.querySelector(selector);
-        if (content.length > 1) {
-            for (const item of content) element.append(item);
-        } else element.append(content);
+    Object.prototype.render = function(...content) {
+        for (const item of [...content]) this.append(item);
     }
 
     return { init }
