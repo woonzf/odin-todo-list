@@ -11,9 +11,9 @@ function createImg(src, alt) {
     return img;
 }
 
-function createDivAndAppend(...content) {
+function createEmptyDivId(text) {
     const div = document.createElement("div");
-    for (const item of [...content]) div.append(item);
+    div.id = text;
     return div;
 }
 
@@ -28,4 +28,4 @@ function getTodayDate() {
     return `${day} ${month} ${year}`;
 }
 
-export { createText, createImg, createDivAndAppend }
+export { createText, createImg, createEmptyDivId }

@@ -52,3 +52,7 @@
     color: var(--color-brand);
     font-weight: bold;
 }
+
+#menu > li.active {
+    font-style: italic;
+}
