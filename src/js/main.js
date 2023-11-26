@@ -1,10 +1,11 @@
 import { createEmptyDivId, createText } from './function';
 
 const main = (() => {
+    let title = null;
     let mainContent = null;
 
     function init() {
-        const title = createEmptyDivId("title");
+        title = createEmptyDivId("title");
         const divider = createEmptyDivClass("divider");
         mainContent = createEmptyDivId("main-content");
 
@@ -14,6 +15,7 @@ const main = (() => {
     }
 
     function render(text) {
+        title.textContent = text;
         mainContent.clear();
         mainContent.append(createText(text + "'s items"));
     }

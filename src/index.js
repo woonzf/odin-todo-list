@@ -4,6 +4,7 @@ import './css/main.css';
 
 import { sideBar } from './js/side-bar';
 import { main } from './js/main';
+import { user } from './js/user';
 
 const page = (() => {
     const content = document.querySelector("#content");
@@ -13,6 +14,7 @@ const page = (() => {
         document.title = "Todo List";
         initLayout();
         setMenuIdDefault("today");
+        user.init();
 
         // Event SIDE BAR
         liMenu = document.querySelectorAll("#menu > li");
@@ -34,19 +36,13 @@ const page = (() => {
 
     Object.prototype.toggleAndRender = function() {
         this.toggleClass("active");
-        this.render();
+        main.render(this.textContent);
     }
 
     Object.prototype.toggleClass = function(className) {
         const liActive = document.querySelector(`.${className}`);
         if (liActive !== null) liActive.classList.remove(className);
         this.classList.add(className);
-    }
-
-    Object.prototype.render = function() {
-        const title = document.querySelector("#title");
-        title.textContent = this.textContent;
-        main.render(this.textContent);
     }
 
     return { init }
