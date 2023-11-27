@@ -8,13 +8,14 @@ import { user } from './js/user';
 
 const page = (() => {
     const content = document.querySelector("#content");
+    let profile = null;
     let liMenu = null;
 
     function init() {
         document.title = "Todo List";
         initLayout();
+        initProfile();
         setMenuIdDefault("today");
-        user.init();
 
         // Event SIDE BAR
         liMenu = document.querySelectorAll("#menu > li");
@@ -29,6 +30,16 @@ const page = (() => {
         content.append(sideBar.init(), main.init());
     }
 
+    function initProfile() {
+        profile = user.init();
+        const div = document.querySelector("#profile");
+        const img = div.querySelector("img");
+        const name = div.querySelector("div");
+        img.src = profile.icon.src;
+        img.alt = profile.icon.alt;
+        name.textContent = profile.name;
+    }
+
     function setMenuIdDefault(text) {
         const li = document.querySelector(`#${text}`);
         li.toggleAndRender();
@@ -36,7 +47,7 @@ const page = (() => {
 
     Object.prototype.toggleAndRender = function() {
         this.toggleClass("active");
-        main.render(this.textContent);
+        main.render(this.textContent, profile.projects);
     }
 
     Object.prototype.toggleClass = function(className) {

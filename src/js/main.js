@@ -14,10 +14,14 @@ const main = (() => {
         return div;
     }
 
-    function render(text) {
+    function createAddProject() {
+        const div = createText("+ Add Project");
+    }
+
+    function render(text, list) {
         title.textContent = text;
         mainContent.clear();
-        mainContent.append(createText(text + "'s items"));
+        mainContent.append(createText(list));
     }
 
     Object.prototype.clear = function() {

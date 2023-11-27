@@ -8,10 +8,11 @@ import iconProject from '../img/book-multiple-outline-custom.png';
 const sideBar = (() => {
     function init() {
         const brand = createBrand();
+        const user = createProfile();
         const menu = createMenu(getMenuList());
         
         const div = createEmptyDivId("side-bar");
-        div.append(brand, menu);
+        div.append(brand, user, menu);
         return div;
     }
 
@@ -40,6 +41,14 @@ const sideBar = (() => {
         const name = createText("todo list");
         const div = createEmptyDivId("brand");
         div.append(icon, name);
+        return div;
+    }
+
+    function createProfile() {
+        const img = createImg("", "");
+        const name = createText("");
+        const div = createEmptyDivId("profile");
+        div.append(img, name);
         return div;
     }
 

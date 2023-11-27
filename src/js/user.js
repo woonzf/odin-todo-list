@@ -1,6 +1,8 @@
+import iconUser from '../img/topguntocat.png';
+
 const user = (() => {
     function init() {
-        test();
+        return registerUser();
     }
 
     function test() {
@@ -17,10 +19,29 @@ const user = (() => {
         console.log(user.projects[0].tasks[0])
     }
 
+    function registerUser() {
+        let name = "John";
+        // while (name === "") name = prompt("Welcome, what is your name?");
+        return createUser(name);
+    }
+
+    function createUser(name) {
+        const user = new User(name);
+        user.icon.src = iconUser;
+        user.icon.alt = "Topguntocat";
+        const project = new Project("Default", generateId(user.projects));
+        user.projects.push(project);
+        return user;
+    }
+
     class User {
         constructor(name) {
             this.name = name;
         }
+        icon = {
+            src: null,
+            alt: null,
+        };
         projects = [];
     }
 

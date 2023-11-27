@@ -26,6 +26,19 @@
     gap: 10px;
 }
 
+#profile {
+    font-size: 18px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+#profile > img {
+    background-color: white;
+    height: 48px;
+    border-radius: 24px;
+}
+
 #menu {
     display: grid;
     gap: 10px;
