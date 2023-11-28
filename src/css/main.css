@@ -1,3 +1,8 @@
+:root {
+    --height-add-task: 32px;
+    --font-size-add-task: 18px;
+}
+
 #main {
     box-sizing: border-box;
     min-height: 100vh;
@@ -14,7 +19,52 @@
     font-size: 24px;
 }
 
+.project {
+    background-color: var(--color-side-bar);
+    border-radius: 10px;
+    padding: 20px 40px;
+    font-size: 18px;
+
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
 .divider {
     width: 100%;
     border-bottom: 1px solid grey;
+}
+
+.project-task {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.task {
+    background-color: var(--color-main);
+    border-radius: 10px;
+    padding: 10px;
+}
+
+.add-task-wrapper {
+    height: var(--height-add-task);
+}
+
+.add-task {
+    height: var(--height-add-task);
+    background-color: transparent;
+    color: var(--color-brand);
+    border: none;
+    padding: 5px 10px;
+    font-size: var(--font-size-add-task);
+    font-style: italic;
+}
+
+.add-task:hover {
+    cursor: pointer;
+}
+
+.add-task:active {
+    font-size: calc(var(--font-size-add-task) - 1px);
 }
