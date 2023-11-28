@@ -1,4 +1,5 @@
 :root {
+    --color-main: #f0f9ff;
     --height-add-task: 32px;
     --font-size-add-task: 18px;
 }
@@ -6,6 +7,7 @@
 #main {
     box-sizing: border-box;
     min-height: 100vh;
+    margin-left: var(--width-side-bar);
     padding: 50px 100px;
 
     background-color: var(--color-main);

@@ -1,6 +1,14 @@
+:root {
+    --color-side-bar: #e0f2fe;
+    --color-brand: #0ea5e9;
+    --color-select: #bae6fd;
+    --width-side-bar: 20vw;
+}
+
 #side-bar {
     box-sizing: border-box;
     min-height: 100vh;
+    width: var(--width-side-bar);
     padding: 20px;
 
     background-color: var(--color-side-bar);
@@ -10,6 +18,9 @@
     display: flex;
     flex-direction: column;
     gap: 20px;
+
+    position: fixed;
+    top: 0;
 }
 
 #brand > img {
