@@ -1,18 +1,39 @@
-import { createEmptyDivClass, createEmptyDivId, createText } from './function';
+import { createEmptyDivClass, createEmptyDivId, createInputWithLabel, 
+    createSelectWithLabel, createText } from './function';
 
 const main = (() => {
     let title = null;
     let display = null;
+    const priority = ["Low", "Medium", "High"];
 
     function init() {
         title = createEmptyDivId("title");
         const mainContent = createEmptyDivId("main-content");
         display = createEmptyDivId("display");
         mainContent.append(display);
+        const dialogAddTask = createDialogAddTask();
 
         const div = createEmptyDivId("main");
-        div.append(title, mainContent);
+        div.append(title, mainContent, dialogAddTask);
         return div;
+    }
+
+    function createDialogAddTask() {
+        const inputDesc = createInputWithLabel("Description", "text");
+        const inputDueDate = createInputWithLabel("Due Date", "date");
+        const inputPriority = createSelectWithLabel("Priority", priority);
+        // close button
+        // add button
+        
+        const form = document.createElement("form");
+        form.method = "dialog";
+        form.id = "add-task";
+        form.append(inputDesc, inputDueDate, inputPriority);
+
+        const dialog = document.createElement("dialog");
+        dialog.id = "dialog-add-task";
+        dialog.append(form);
+        return dialog;
     }
 
     function render(text, profile) {
@@ -64,7 +85,12 @@ const main = (() => {
         desc.textContent = task.description;
         const divTask = createEmptyDivClass("task");
         divTask.append(desc);
+        divTask.classList.add(getPriorityClass(task.priority));
         return divTask;
+    }
+
+    function getPriorityClass(priority) {
+        return priority.toLowerCase();
     }
 
     function createAddTask(id) {

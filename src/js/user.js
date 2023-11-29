@@ -1,4 +1,4 @@
-import { Project, generateId } from './function';
+import { Project, User } from './function';
 
 import iconUser from '../img/topguntocat.png';
 
@@ -17,23 +17,9 @@ const user = (() => {
         const user = new User(name);
         user.icon.src = iconUser;
         user.icon.alt = "Topguntocat";
-        const project = new Project("Default", generateId(user.projects));
+        const project = new Project("Default", user.projects);
         user.addProject(project);
         return user;
-    }
-
-    class User {
-        constructor(name) {
-            this.name = name;
-        }
-        icon = {
-            src: null,
-            alt: null,
-        };
-        projects = [];
-        addProject(project) {
-            this.projects.push(project);
-        }
     }
 
     return { init };

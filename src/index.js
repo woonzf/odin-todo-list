@@ -5,13 +5,14 @@ import './css/main.css';
 import { sideBar } from './js/side-bar';
 import { main } from './js/main';
 import { user } from './js/user';
-import { Task, generateId } from './js/function';
+import { Task } from './js/function';
 
 const page = (() => {
     const content = document.querySelector("#content");
     let profile = null;
     let liMenu = null;
     let liActive = null;
+    let dialogAddTask = null;
     let btnAddTasks = null;
 
     function init() {
@@ -20,8 +21,9 @@ const page = (() => {
         initProfile();
         setMenuIdDefault("today");
 
-        // Event MENU
         liMenu = document.querySelectorAll("#menu > li");
+        dialogAddTask = document.querySelector("#dialog-add-task");
+
         liMenu.forEach(li => {
             li.onclick = function(e) {
                 e.target.toggleAndRender();
@@ -50,8 +52,7 @@ const page = (() => {
 
     Object.prototype.toggleAndRender = function() {
         this.toggleClass("active");
-        main.render(liActive.textContent, profile);
-        refreshAddTask();
+        renderAndRefresh();
     }
 
     Object.prototype.toggleClass = function(className) {
@@ -60,15 +61,20 @@ const page = (() => {
         liActive = this;
     }
 
+    function renderAndRefresh() {
+        main.render(liActive.textContent, profile);
+        refreshAddTask();
+    }
+
     function refreshAddTask() {
         btnAddTasks = document.querySelectorAll(".add-task");
         btnAddTasks.forEach(btn => {
             btn.onclick = function() {
-                const index = profile.projects.findIndex(project => project.id === parseInt(btn.id.split("-")[1]));
-                const task = new Task("Code", "28/11/2023", "High", generateId(profile.projects))
-                profile.projects[index].addTask(task);
-                main.render(liActive.textContent, profile);
-                refreshAddTask();
+                dialogAddTask.showModal();
+                // const index = profile.projects.findIndex(project => project.id === parseInt(btn.id.split("-")[1]));
+                // const task = new Task("Code", "28/11/2023", "High", profile.projects)
+                // profile.projects[index].addTask(task);
+                // renderAndRefresh();
             }
         });
     }

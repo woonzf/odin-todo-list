@@ -45,8 +45,25 @@
 
 .task {
     background-color: var(--color-main);
-    border-radius: 10px;
+    border-radius: 5px;
     padding: 10px;
+    padding-left: 20px;
+}
+
+.task:hover {
+    box-shadow: 0 0 10px var(--color-brand);
+}
+
+.high {
+    border-left: 5px solid red;
+}
+
+.medium {
+    border-left: 5px solid orange;
+}
+
+.medium {
+    border-left: 5px solid green;
 }
 
 .add-task-wrapper {
@@ -69,4 +86,45 @@
 
 .add-task:active {
     font-size: calc(var(--font-size-add-task) - 1px);
+}
+
+/* DIALOG */
+::backdrop {
+    background-color: black;
+    opacity: 25%;
+}
+
+input,
+select {
+    height: 2rem;
+    border-radius: 10px;
+    border: none;
+    outline: none;
+    background-color: var(--color-side-bar);
+    padding: 0 1rem;
+}
+
+#dialog-add-task {
+    border: none;
+    box-shadow: 0 0 10px var(--color-brand);
+    border-radius: 10px;
+    padding: 20px;
+    font-size: 18px;
+
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+form {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.input,
+.select {
+    display: flex;
+    flex-direction: column;
 }

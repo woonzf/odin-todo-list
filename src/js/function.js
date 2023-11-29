@@ -23,10 +23,24 @@ function createEmptyDivClass(text) {
     return div;
 }
 
+class User {
+    constructor(name) {
+        this.name = name;
+    }
+    icon = {
+        src: null,
+        alt: null,
+    };
+    projects = [];
+    addProject(project) {
+        this.projects.push(project);
+    }
+}
+
 class Project {
-    constructor(title, id) {
+    constructor(title, list) {
         this.title = title;
-        this.id = id;
+        this.id = generateId(list);
     }
     tasks = [];
     addTask(task) {
@@ -39,11 +53,11 @@ class Project {
 }
 
 class Task {
-    constructor(description, dueDate, priority, id) {
+    constructor(description, dueDate, priority, list) {
         this.description = description;
         this.dueDate = dueDate;
         this.priority = priority;
-        this.id = id;
+        this.id = generateId(list);
     }
     status = false;
 }
@@ -54,6 +68,35 @@ function generateId(list) {
     for (const item of list) idList.push(item.id);
     return Math.max(...idList) + 1;
 }
+
+function createInputWithLabel(text, type) {
+    const label = createLabel(text);
+    const input = document.createElement("input");
+    input.type = type;
+    input.id = text.toLowerCase();
+    input.name = input.id;
+    const div = createEmptyDivClass("input");
+    div.append(label, input);
+    return div;
+}
+
+function createSelectWithLabel(text, option) {
+    const label = createLabel(text);
+    const select = document.createElement("select");
+    select.id = text.toLowerCase();
+    select.name = select.id;
+    for (const item of option) select.add(new Option(item, item.toLowerCase()), undefined);
+    const div = createEmptyDivClass("select");
+    div.append(label, select);
+    return div;
+}
+
+function createLabel(text) {
+    const label = document.createElement("label");
+    label.textContent = text;
+    label.htmlFor = text.toLowerCase();
+    return label;
+};
 
 function getTodayDate() {
     const date = new Date();
@@ -66,5 +109,5 @@ function getTodayDate() {
     return `${day} ${month} ${year}`;
 }
 
-export { createText, createImg, createEmptyDivId, createEmptyDivClass, Project,
-    Task, generateId }
+export { createText, createImg, createEmptyDivId, createEmptyDivClass, User, 
+    Project, Task, createInputWithLabel, createSelectWithLabel }
