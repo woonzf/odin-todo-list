@@ -16,6 +16,9 @@ li {
     list-style: none;
 }
 
-#content {
+body,
+input,
+select,
+button {
     font-family: var(--font-content);
 }

@@ -1,54 +1,56 @@
-import { createEmptyDivClass, createEmptyDivId, createInputWithLabel, 
+import { createButton, createEmptyDivClass, createEmptyDivId, createInputWithLabel, 
     createSelectWithLabel, createText } from './function';
 
 const main = (() => {
     let title = null;
-    let display = null;
+    let mainContent = null;
     const priority = ["Low", "Medium", "High"];
 
     function init() {
         title = createEmptyDivId("title");
-        const mainContent = createEmptyDivId("main-content");
-        display = createEmptyDivId("display");
-        mainContent.append(display);
+        mainContent = createEmptyDivId("main-content");
         const dialogAddTask = createDialogAddTask();
-
         const div = createEmptyDivId("main");
         div.append(title, mainContent, dialogAddTask);
         return div;
     }
 
     function createDialogAddTask() {
-        const inputDesc = createInputWithLabel("Description", "text");
+        const inputDesc = createInputWithLabel("Description", "text", "first");
         const inputDueDate = createInputWithLabel("Due Date", "date");
         const inputPriority = createSelectWithLabel("Priority", priority);
-        // close button
-        // add button
+        const btnAdd = createButton("Add", "btn-task-add");
+        btnAdd.type = "button";
         
         const form = document.createElement("form");
         form.method = "dialog";
-        form.id = "add-task";
-        form.append(inputDesc, inputDueDate, inputPriority);
+        form.id = "form-add-task";
+        form.append(inputDesc, inputDueDate, inputPriority, btnAdd);
+        
+        const text = createText("Add a Task");
+        const btnClose = createButton("X", "btn-task-close");
+        const closeWrapper = createEmptyDivId("close-wrapper");
+        closeWrapper.append(text, btnClose);
 
         const dialog = document.createElement("dialog");
         dialog.id = "dialog-add-task";
-        dialog.append(form);
+        dialog.append(closeWrapper, form);
         return dialog;
     }
 
-    function render(text, profile) {
-        title.textContent = text;
-        display.clear();
-        const info = getInfo(text, profile);
-        for (const item of info) display.append(item);
+    function render(category, profile) {
+        title.textContent = category;
+        mainContent.clear();
+        const info = getInfo(category, profile);
+        for (const item of info) mainContent.append(item);
     }
 
     Object.prototype.clear = function() {
         while (this.children.length > 0) this.removeChild(this.lastChild);
     }
 
-    function getInfo(text, profile) {
-        switch(text) {
+    function getInfo(category, profile) {
+        switch(category) {
             case "Today":
                 return [createText("</>")];
             case "Upcoming":
@@ -83,9 +85,12 @@ const main = (() => {
     function createTask(task) {
         const desc = createEmptyDivClass("desc");
         desc.textContent = task.description;
+        const dueDate = createEmptyDivClass("due-date");
+        dueDate.textContent = task.dueDate;
         const divTask = createEmptyDivClass("task");
-        divTask.append(desc);
+        divTask.append(desc, dueDate);
         divTask.classList.add(getPriorityClass(task.priority));
+        divTask.id = `t-${task.id}`;
         return divTask;
     }
 
@@ -94,10 +99,8 @@ const main = (() => {
     }
 
     function createAddTask(id) {
-        const button = document.createElement("button");
-        button.textContent = "+ Add Task";
+        const button = createButton("+ Add Task", `p-${id}`);
         button.classList.add ("add-task");
-        button.id = `p-${id}`;
         const div = createEmptyDivClass("add-task-wrapper");
         div.append(button);
         return div;

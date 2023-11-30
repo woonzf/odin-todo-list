@@ -23,58 +23,14 @@ function createEmptyDivClass(text) {
     return div;
 }
 
-class User {
-    constructor(name) {
-        this.name = name;
-    }
-    icon = {
-        src: null,
-        alt: null,
-    };
-    projects = [];
-    addProject(project) {
-        this.projects.push(project);
-    }
-}
-
-class Project {
-    constructor(title, list) {
-        this.title = title;
-        this.id = generateId(list);
-    }
-    tasks = [];
-    addTask(task) {
-        this.tasks.push(task);
-    }
-
-    // Optional
-    notes;
-    checklist;
-}
-
-class Task {
-    constructor(description, dueDate, priority, list) {
-        this.description = description;
-        this.dueDate = dueDate;
-        this.priority = priority;
-        this.id = generateId(list);
-    }
-    status = false;
-}
-
-function generateId(list) {
-    if (list.length === 0) return 1;
-    let idList = [];
-    for (const item of list) idList.push(item.id);
-    return Math.max(...idList) + 1;
-}
-
-function createInputWithLabel(text, type) {
+function createInputWithLabel(text, type, ...arg) {
     const label = createLabel(text);
     const input = document.createElement("input");
     input.type = type;
-    input.id = text.toLowerCase();
+    input.id = createInputId(text);
     input.name = input.id;
+    input.required = true;
+    if ([...arg][0] === "first") input.autofocus = "on";
     const div = createEmptyDivClass("input");
     div.append(label, input);
     return div;
@@ -85,6 +41,7 @@ function createSelectWithLabel(text, option) {
     const select = document.createElement("select");
     select.id = text.toLowerCase();
     select.name = select.id;
+    select.required = true;
     for (const item of option) select.add(new Option(item, item.toLowerCase()), undefined);
     const div = createEmptyDivClass("select");
     div.append(label, select);
@@ -94,9 +51,23 @@ function createSelectWithLabel(text, option) {
 function createLabel(text) {
     const label = document.createElement("label");
     label.textContent = text;
-    label.htmlFor = text.toLowerCase();
+    label.htmlFor = createInputId(text);
     return label;
 };
+
+function createButton(text, id) {
+    const btn = document.createElement("button");
+    btn.textContent = text;
+    btn.id = id;
+    return btn;
+}
+
+function createInputId(text) {
+    let id = "";
+    if (text.split(" ").length > 1) id = text.toLowerCase().split(" ").join("-");
+    else id = text.toLowerCase();
+    return id;
+}
 
 function getTodayDate() {
     const date = new Date();
@@ -109,5 +80,5 @@ function getTodayDate() {
     return `${day} ${month} ${year}`;
 }
 
-export { createText, createImg, createEmptyDivId, createEmptyDivClass, User, 
-    Project, Task, createInputWithLabel, createSelectWithLabel }
+export { createText, createImg, createEmptyDivId, createEmptyDivClass, 
+    createInputWithLabel, createSelectWithLabel, createButton }

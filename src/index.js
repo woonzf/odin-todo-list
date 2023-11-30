@@ -5,15 +5,14 @@ import './css/main.css';
 import { sideBar } from './js/side-bar';
 import { main } from './js/main';
 import { user } from './js/user';
-import { Task } from './js/function';
 
 const page = (() => {
     const content = document.querySelector("#content");
     let profile = null;
-    let liMenu = null;
     let liActive = null;
     let dialogAddTask = null;
     let btnAddTasks = null;
+    let projectId = null;
 
     function init() {
         document.title = "Todo List";
@@ -21,14 +20,37 @@ const page = (() => {
         initProfile();
         setMenuIdDefault("today");
 
-        liMenu = document.querySelectorAll("#menu > li");
-        dialogAddTask = document.querySelector("#dialog-add-task");
-
+        // Event SIDE BAR
+        const liMenu = document.querySelectorAll("#menu > li");
         liMenu.forEach(li => {
             li.onclick = function(e) {
-                e.target.toggleAndRender();
+                toggleAndRender(e.target);
             }
         });
+
+        // Event DIALOG CLOSE
+        const btnTaskClose = document.querySelector("#btn-task-close");
+        dialogAddTask = document.querySelector("#dialog-add-task");
+        const formTask = document.querySelector("#form-add-task");
+
+        btnTaskClose.onclick = function() {
+            dialogAddTask.close();
+            formTask.reset();
+        }
+
+        // Event TASK ADD
+        const btnAdd = document.querySelector("#btn-task-add");
+        const inputDesc = document.querySelector("#description");
+        const inputDueDate = document.querySelector("#due-date");
+        const selectPriority = document.querySelector("#priority");
+
+        btnAdd.onclick = function() {
+            user.addNewTask(inputDesc.value, inputDueDate.value, selectPriority.value, projectId);
+            dialogAddTask.close();
+            formTask.reset();
+            profile = user.refresh();
+            renderAndRefresh();
+        }
     }
 
     function initLayout() {
@@ -47,18 +69,18 @@ const page = (() => {
 
     function setMenuIdDefault(text) {
         const li = document.querySelector(`#${text}`);
-        li.toggleAndRender();
+        toggleAndRender(li);
     }
 
-    Object.prototype.toggleAndRender = function() {
-        this.toggleClass("active");
+    function toggleAndRender(target) {
+        toggleClass(target, "active");
         renderAndRefresh();
     }
 
-    Object.prototype.toggleClass = function(className) {
+    function toggleClass(target, className) {
         if (liActive !== null) liActive.classList.remove(className);
-        this.classList.add(className);
-        liActive = this;
+        target.classList.add(className);
+        liActive = target;
     }
 
     function renderAndRefresh() {
@@ -71,10 +93,7 @@ const page = (() => {
         btnAddTasks.forEach(btn => {
             btn.onclick = function() {
                 dialogAddTask.showModal();
-                // const index = profile.projects.findIndex(project => project.id === parseInt(btn.id.split("-")[1]));
-                // const task = new Task("Code", "28/11/2023", "High", profile.projects)
-                // profile.projects[index].addTask(task);
-                // renderAndRefresh();
+                projectId = btn.id;
             }
         });
     }
