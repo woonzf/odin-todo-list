@@ -1,5 +1,7 @@
-import { createButton, createEmptyDivClass, createEmptyDivId, createInputWithLabel, 
-    createSelectWithLabel, createText } from './function';
+import { createButton, createEmptyDivClass, createEmptyDivId, createImg, 
+    createInputWithLabel, createSelectWithLabel, createText } from './function';
+
+import iconOption from '../img/dots-horizontal-custom.png';
 
 const main = (() => {
     let title = null;
@@ -20,7 +22,7 @@ const main = (() => {
         const inputDueDate = createInputWithLabel("Due Date", "date");
         const inputPriority = createSelectWithLabel("Priority", priority);
         const btnAdd = createButton("Add", "btn-task-add");
-        btnAdd.type = "button";
+        btnAdd.type = "submit";
         
         const form = document.createElement("form");
         form.method = "dialog";
@@ -83,12 +85,24 @@ const main = (() => {
     }
 
     function createTask(task) {
+        // checkbox for status
+
         const desc = createEmptyDivClass("desc");
         desc.textContent = task.description;
         const dueDate = createEmptyDivClass("due-date");
-        dueDate.textContent = task.dueDate;
+        dueDate.textContent = "Due: " + task.dueDate;
+        
+        const divInfo = createEmptyDivClass("info");
+        divInfo.append(desc, dueDate);
+
+        // days left
+        
+        const signOption = createImg(iconOption, "Option Icon");
+        const btnOption = createButton(signOption, `ot-${task.id}`);
+        btnOption.classList.add("option");
+
         const divTask = createEmptyDivClass("task");
-        divTask.append(desc, dueDate);
+        divTask.append(divInfo, btnOption);
         divTask.classList.add(getPriorityClass(task.priority));
         divTask.id = `t-${task.id}`;
         return divTask;

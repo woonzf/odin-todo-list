@@ -16,7 +16,7 @@ const user = (() => {
     function addNewTask(description, dueDate, priority, projectId) {
         const index = user.projects.findIndex(project => project.id === parseInt(projectId.split("-")[1]));
         const task = new Task(description, dueDate, priority, user.projects[index].tasks);
-        user.projects[index].addTask(task);
+        user.projects[index].tasks.push(task);
     }
 
     function registerUser() {
@@ -30,7 +30,7 @@ const user = (() => {
         user.icon.src = iconUser;
         user.icon.alt = "Topguntocat";
         const project = new Project("Default", user.projects);
-        user.addProject(project);
+        user.projects.push(project);
         return user;
     }
 
@@ -43,9 +43,6 @@ const user = (() => {
             alt: null,
         };
         projects = [];
-        addProject(project) {
-            this.projects.push(project);
-        }
     }
     
     class Project {
@@ -54,9 +51,6 @@ const user = (() => {
             this.id = generateId(list);
         }
         tasks = [];
-        addTask(task) {
-            this.tasks.push(task);
-        }
     
         // Optional
         notes;

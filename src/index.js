@@ -44,7 +44,9 @@ const page = (() => {
         const inputDueDate = document.querySelector("#due-date");
         const selectPriority = document.querySelector("#priority");
 
-        btnAdd.onclick = function() {
+        btnAdd.onclick = function(e) {
+            if (inputDesc.value === "" || inputDueDate.value === "") return;
+            e.preventDefault();
             user.addNewTask(inputDesc.value, inputDueDate.value, selectPriority.value, projectId);
             dialogAddTask.close();
             formTask.reset();

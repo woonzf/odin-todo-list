@@ -57,7 +57,7 @@ function createLabel(text) {
 
 function createButton(text, id) {
     const btn = document.createElement("button");
-    btn.textContent = text;
+    btn.append(text);
     btn.id = id;
     return btn;
 }
