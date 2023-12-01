@@ -85,24 +85,30 @@ const main = (() => {
     }
 
     function createTask(task) {
-        // checkbox for status
+        const checkBox = document.createElement("input");
+        checkBox.type = "checkbox";
+        checkBox.checked = task.status;
+
+        // days left
 
         const desc = createEmptyDivClass("desc");
         desc.textContent = task.description;
+        
+        const divInfo = createEmptyDivClass("task-info");
+        divInfo.append(checkBox, desc);
+        
         const dueDate = createEmptyDivClass("due-date");
         dueDate.textContent = "Due: " + task.dueDate;
-        
-        const divInfo = createEmptyDivClass("info");
-        divInfo.append(desc, dueDate);
-
-        // days left
         
         const signOption = createImg(iconOption, "Option Icon");
         const btnOption = createButton(signOption, `ot-${task.id}`);
         btnOption.classList.add("option");
 
+        const divEnd = createEmptyDivClass("task-end");
+        divEnd.append(dueDate, btnOption);
+
         const divTask = createEmptyDivClass("task");
-        divTask.append(divInfo, btnOption);
+        divTask.append(divInfo, divEnd);
         divTask.classList.add(getPriorityClass(task.priority));
         divTask.id = `t-${task.id}`;
         return divTask;
