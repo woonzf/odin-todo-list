@@ -1,5 +1,6 @@
 import { createButton, createEmptyDivClass, createEmptyDivId, createImg, 
-    createInputWithLabel, createSelectWithLabel, createText } from './function';
+    createInputWithLabel, createSelectWithLabel, createText, displayDaysLeft, 
+    getDaysLeft } from './function';
 
 import iconDelete from '../img/delete-outline-custom.png';
 import iconDeleteHover from '../img/delete-empty-outline-custom.png';
@@ -43,13 +44,13 @@ const main = (() => {
 
     function render(category, profile) {
         title.textContent = category;
-        mainContent.clear();
+        clear(mainContent);
         const info = getInfo(category, profile);
         for (const item of info) mainContent.append(item);
     }
 
-    Object.prototype.clear = function() {
-        while (this.children.length > 0) this.removeChild(this.lastChild);
+    function clear(el) {
+        while (el.children.length > 0) el.removeChild(el.lastChild);
     }
 
     function getInfo(category, profile) {
@@ -86,6 +87,7 @@ const main = (() => {
     }
 
     function createTask(task) {
+        // Status
         const checkBox = document.createElement("input");
         checkBox.type = "checkbox";
         checkBox.name = "status";
@@ -93,17 +95,36 @@ const main = (() => {
         checkBox.id = `s-${task.projectId}-${task.id}`;
         checkBox.checked = task.status;
 
-        // days left
-
+        // Description
         const desc = createEmptyDivClass("desc");
         desc.textContent = task.description;
         
+        // Info
         const divInfo = createEmptyDivClass("task-info");
         divInfo.append(checkBox, desc);
         
+        // Days Left
+        const daysLeft = createEmptyDivClass("days-left");
+        const intDaysLeft = getDaysLeft(task.dueDate);
+        daysLeft.textContent = displayDaysLeft(intDaysLeft);
+
+        // Due date
         const dueDate = createEmptyDivClass("due-date");
         dueDate.textContent = "Due: " + task.dueDate;
+
+        // Check for Status
+        if (task.status === false) {
+            if (intDaysLeft < 0) daysLeft.classList.add("overdue");
+        } else {
+            daysLeft.classList.add("hidden");
+            dueDate.classList.add("hidden");
+            desc.classList.add("cross");
+            const div = createEmptyDivClass("done");
+            div.textContent = "DONE";
+            divInfo.append(div);
+        }
         
+        // Delete
         const signDelete = createImg(iconDelete, "Delete Icon");
         const btnDelete = createButton(signDelete, `t-${task.projectId}-${task.id}`);
         btnDelete.classList.add("delete-task");
@@ -111,9 +132,11 @@ const main = (() => {
         signDelete.onmouseover = function() { signDelete.src = iconDeleteHover; }
         signDelete.onmouseout = function() { signDelete.src = iconDelete; }
 
+        // End
         const divEnd = createEmptyDivClass("task-end");
-        divEnd.append(dueDate, btnDelete);
+        divEnd.append(daysLeft, dueDate, btnDelete);
 
+        // Task
         const divTask = createEmptyDivClass("task");
         divTask.append(divInfo, divEnd);
         divTask.classList.add(getPriorityClass(task.priority));

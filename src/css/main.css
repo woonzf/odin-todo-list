@@ -1,5 +1,8 @@
 :root {
     --color-main: #f0f9ff;
+    --red: #ef4444;
+    --yellow: #eab308;
+    --green: #22c55e;
 }
 
 #main {
@@ -40,10 +43,15 @@
     gap: 10px;
 }
 
+/* TASK */
 .task {
     background-color: var(--color-main);
     border-radius: 5px;
     padding: 10px 20px;
+
+    border-top: 1px solid var(--color-main);
+    border-right: 1px solid var(--color-main);
+    border-bottom: 1px solid var(--color-main);
 
     display: flex;
     justify-content: space-between;
@@ -52,21 +60,24 @@
 }
 
 .task:hover {
-    box-shadow: 0 0 10px var(--color-brand);
+    border-top: 1px solid var(--color-brand);
+    border-right: 1px solid var(--color-brand);
+    border-bottom: 1px solid var(--color-brand);
 }
 
 .high {
-    border-left: 5px solid #ef4444;
+    border-left: 5px solid var(--red);
 }
 
 .medium {
-    border-left: 5px solid #eab308;
+    border-left: 5px solid var(--yellow);
 }
 
 .low {
-    border-left: 5px solid #22c55e;
+    border-left: 5px solid var(--green);
 }
 
+/* TASK INFO */
 .task-info {
     width: 100%;
     display: flex;
@@ -75,17 +86,36 @@
 }
 
 input.status {
-    width: 18px;
+    transform: scale(1.2);
 }
 
+/* TASK END */
 .task-end {
     display: flex;
     align-items: center;
     gap: 1rem;
 }
 
-.due-date{
+.days-left,
+.due-date {
     width: 14ch;
+}
+
+.overdue {
+    color: var(--red);
+}
+
+.hidden {
+    visibility: hidden;
+}
+
+.cross {
+    text-decoration: line-through;
+}
+
+.done {
+    color: var(--green);
+    font-style: italic;
 }
 
 .delete-task {
@@ -99,6 +129,7 @@ input.status {
     display: flex;
 }
 
+/* ADD TASK */
 .add-task-wrapper {
     height: var(--height-add-task);
 }
@@ -128,8 +159,8 @@ input.status {
     opacity: 25%;
 }
 
-input,
-select {
+dialog input,
+dialog select {
     height: 2rem;
     border-radius: 10px;
     border: none;

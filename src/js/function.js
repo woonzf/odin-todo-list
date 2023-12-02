@@ -58,7 +58,7 @@ function createLabel(text) {
 function createButton(text, id) {
     const btn = document.createElement("button");
     btn.append(text);
-    btn.id = id;
+    if (id !== null) btn.id = id;
     return btn;
 }
 
@@ -69,16 +69,42 @@ function createInputId(text) {
     return id;
 }
 
-function getTodayDate() {
-    const date = new Date();
+function getDaysLeft(due) {
+    const oneDay = 24 * 60 * 60 * 1000; // hours*minutes*seconds*milliseconds
+    const dueArr = due.split("-");
+    const todayArr = getTodayArr().split("-");
+    const dueDate = new Date(dueArr[0], dueArr[1], dueArr[2]);
+    const today = new Date(todayArr[0], todayArr[1], todayArr[2]);
+    return Math.round((dueDate - today) / oneDay);
+    // Source: https://stackoverflow.com/questions/2627473/how-to-calculate-the-number-of-days-between-two-dates
+}
+
+function displayDaysLeft(i) {
+    if (i >= 0) {
+        if (i > 1) return `${i} days left`;
+        return `${i} day left`;
+    } else {
+        const iAbs = Math.abs(i);
+        if (i === -1) return `${iAbs} day overdue`;
+        return `${iAbs} days overdue`;
+    }
+}
+
+function getTodayArr() {
+    const today = new Date();
+    const date = today.getDate();
+    const month = today.getMonth() + 1;
+    const year = today.getFullYear();
+    return `${year}-${month}-${date}`;
+}
+
+function getTodayString(arr) {
     const monthList = ["January", "February", "March", "April", "May", "June",
         "July", "August", "September", "October", "November", "December"];
-    
-    const day = date.getDate();
-    const month = monthList[date.getMonth()].toUpperCase();
-    const year = date.getFullYear();
-    return `${day} ${month} ${year}`;
+    const month = monthList[arr[1] - 1].toUpperCase();
+    return `${arr[2]} ${month} ${arr[0]}`;
 }
 
 export { createText, createImg, createEmptyDivId, createEmptyDivClass, 
-    createInputWithLabel, createSelectWithLabel, createButton }
+    createInputWithLabel, createSelectWithLabel, createButton, getDaysLeft, 
+    displayDaysLeft }

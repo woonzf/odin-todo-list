@@ -25,8 +25,8 @@ const page = (() => {
         // Event SIDE BAR
         const liMenu = document.querySelectorAll("#menu > li");
         liMenu.forEach(li => {
-            li.onclick = function(e) {
-                toggleAndRender(e.target);
+            li.onclick = function() {
+                toggleAndRender(li);
             }
         });
 
@@ -76,8 +76,8 @@ const page = (() => {
         toggleAndRender(li);
     }
 
-    function toggleAndRender(target) {
-        toggleClass(target, "active");
+    function toggleAndRender(el) {
+        toggleClass(el, "active");
         renderAndRefresh();
     }
 
