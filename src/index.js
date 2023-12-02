@@ -12,7 +12,9 @@ const page = (() => {
     let liActive = null;
     let dialogAddTask = null;
     let btnAddTasks = null;
-    let projectId = null;
+    let btnDeleteTasks = null;
+    let checkBoxesStatus = null;
+    let btnId = null;
 
     function init() {
         document.title = "Todo List";
@@ -47,7 +49,7 @@ const page = (() => {
         btnAdd.onclick = function(e) {
             if (inputDesc.value === "" || inputDueDate.value === "") return;
             e.preventDefault();
-            user.addNewTask(inputDesc.value, inputDueDate.value, selectPriority.value, projectId);
+            user.addTask(inputDesc.value, inputDueDate.value, selectPriority.value, btnId);
             dialogAddTask.close();
             formTask.reset();
             profile = user.refresh();
@@ -87,15 +89,39 @@ const page = (() => {
 
     function renderAndRefresh() {
         main.render(liActive.textContent, profile);
-        refreshAddTask();
+        refreshAddTaskListener();
+        refreshDeleteTaskListener();
+        refreshStatusListener();
     }
 
-    function refreshAddTask() {
+    function refreshAddTaskListener() {
         btnAddTasks = document.querySelectorAll(".add-task");
         btnAddTasks.forEach(btn => {
             btn.onclick = function() {
                 dialogAddTask.showModal();
-                projectId = btn.id;
+                btnId = btn.id;
+            }
+        });
+    }
+
+    function refreshDeleteTaskListener() {
+        btnDeleteTasks = document.querySelectorAll(".delete-task");
+        btnDeleteTasks.forEach(btn => {
+            btn.onclick = function() {
+                user.deleteTask(btn.id);
+                profile = user.refresh();
+                renderAndRefresh();
+            }
+        });
+    }
+
+    function refreshStatusListener() {
+        checkBoxesStatus = document.querySelectorAll(".status");
+        checkBoxesStatus.forEach(box => {
+            box.onclick = function() {
+                user.setTaskStatus(box.id, box.checked);
+                profile = user.refresh();
+                renderAndRefresh();
             }
         });
     }

@@ -43,8 +43,7 @@
 .task {
     background-color: var(--color-main);
     border-radius: 5px;
-    padding: 10px;
-    padding-left: 20px;
+    padding: 10px 20px;
 
     display: flex;
     justify-content: space-between;
@@ -75,6 +74,10 @@
     gap: 1rem;
 }
 
+input.status {
+    width: 18px;
+}
+
 .task-end {
     display: flex;
     align-items: center;
@@ -85,13 +88,14 @@
     width: 14ch;
 }
 
-.option {
+.delete-task {
     height: fit-content;
     border: none;
     background-color: transparent;
 }
 
-.option > img {
+.delete-task > img {
+    height: 24px;
     display: flex;
 }
 

@@ -13,12 +13,6 @@ const user = (() => {
         return user;
     }
 
-    function addNewTask(description, dueDate, priority, projectId) {
-        const index = user.projects.findIndex(project => project.id === parseInt(projectId.split("-")[1]));
-        const task = new Task(description, dueDate, priority, user.projects[index].tasks);
-        user.projects[index].tasks.push(task);
-    }
-
     function registerUser() {
         let name = "John";
         // while (name === "") name = prompt("Welcome, what is your name?");
@@ -32,6 +26,25 @@ const user = (() => {
         const project = new Project("Default", user.projects);
         user.projects.push(project);
         return user;
+    }
+
+    function addTask(description, dueDate, priority, id) {
+        const projectId = getProjectId(id);
+        const index = getIndex(user.projects, projectId);
+        const task = new Task(description, dueDate, priority, user.projects[index].tasks, projectId);
+        user.projects[index].tasks.push(task);
+    }
+
+    function deleteTask(id) {
+        const indexProject = getIndex(user.projects, getProjectId(id));
+        const indexTask = getIndex(user.projects[indexProject].tasks, getTaskId(id));
+        user.projects[indexProject].tasks.splice(indexTask, 1);
+    }
+
+    function setTaskStatus(id, status) {
+        const indexProject = getIndex(user.projects, getProjectId(id));
+        const indexTask = getIndex(user.projects[indexProject].tasks, getTaskId(id));
+        user.projects[indexProject].tasks[indexTask].status = status;
     }
 
     class User {
@@ -58,11 +71,12 @@ const user = (() => {
     }
     
     class Task {
-        constructor(description, dueDate, priority, list) {
+        constructor(description, dueDate, priority, list, projectId) {
             this.description = description;
             this.dueDate = dueDate;
             this.priority = priority;
             this.id = generateId(list);
+            this.projectId = projectId;
         }
         status = false;
     }
@@ -74,7 +88,19 @@ const user = (() => {
         return Math.max(...idList) + 1;
     }
 
-    return { init, refresh, addNewTask };
+    function getIndex(arr, id) {
+        return arr.findIndex(el => el.id === id);
+    }
+
+    function getProjectId(id) {
+        return parseInt(id.split("-")[1]);
+    }
+
+    function getTaskId(id) {
+        return parseInt(id.split("-")[2]);
+    }
+
+    return { init, refresh, addTask, deleteTask, setTaskStatus };
 })()
 
 export { user }

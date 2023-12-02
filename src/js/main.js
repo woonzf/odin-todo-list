@@ -1,7 +1,8 @@
 import { createButton, createEmptyDivClass, createEmptyDivId, createImg, 
     createInputWithLabel, createSelectWithLabel, createText } from './function';
 
-import iconOption from '../img/dots-horizontal-custom.png';
+import iconDelete from '../img/delete-outline-custom.png';
+import iconDeleteHover from '../img/delete-empty-outline-custom.png';
 
 const main = (() => {
     let title = null;
@@ -87,6 +88,9 @@ const main = (() => {
     function createTask(task) {
         const checkBox = document.createElement("input");
         checkBox.type = "checkbox";
+        checkBox.name = "status";
+        checkBox.classList.add("status");
+        checkBox.id = `s-${task.projectId}-${task.id}`;
         checkBox.checked = task.status;
 
         // days left
@@ -100,12 +104,15 @@ const main = (() => {
         const dueDate = createEmptyDivClass("due-date");
         dueDate.textContent = "Due: " + task.dueDate;
         
-        const signOption = createImg(iconOption, "Option Icon");
-        const btnOption = createButton(signOption, `ot-${task.id}`);
-        btnOption.classList.add("option");
+        const signDelete = createImg(iconDelete, "Delete Icon");
+        const btnDelete = createButton(signDelete, `t-${task.projectId}-${task.id}`);
+        btnDelete.classList.add("delete-task");
+
+        signDelete.onmouseover = function() { signDelete.src = iconDeleteHover; }
+        signDelete.onmouseout = function() { signDelete.src = iconDelete; }
 
         const divEnd = createEmptyDivClass("task-end");
-        divEnd.append(dueDate, btnOption);
+        divEnd.append(dueDate, btnDelete);
 
         const divTask = createEmptyDivClass("task");
         divTask.append(divInfo, divEnd);
