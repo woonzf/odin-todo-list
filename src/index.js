@@ -11,9 +11,7 @@ const page = (() => {
     let profile = null;
     let liActive = null;
     let dialogAddTask = null;
-    let btnAddTasks = null;
-    let btnDeleteTasks = null;
-    let checkBoxesStatus = null;
+    let dialogAddProject = null;
     let btnId = null;
 
     function init() {
@@ -32,28 +30,44 @@ const page = (() => {
 
         // Event DIALOG CLOSE
         const btnTaskClose = document.querySelector("#btn-task-close");
+        const btnProjectClose = document.querySelector("#btn-project-close");
         dialogAddTask = document.querySelector("#dialog-add-task");
+        dialogAddProject = document.querySelector("#dialog-add-project");
         const formTask = document.querySelector("#form-add-task");
+        const formProject = document.querySelector("#form-add-project");
 
         btnTaskClose.onclick = function() {
             dialogAddTask.close();
             formTask.reset();
         }
 
+        btnProjectClose.onclick = function() {
+            dialogAddProject.close();
+            formProject.reset();
+        }
+
         // Event TASK ADD
-        const btnAdd = document.querySelector("#btn-task-add");
+        const btnAddTaskConfirm = document.querySelector("#btn-task-add");
         const inputDesc = document.querySelector("#description");
         const inputDueDate = document.querySelector("#due-date");
         const selectPriority = document.querySelector("#priority");
 
-        btnAdd.onclick = function(e) {
+        btnAddTaskConfirm.onclick = function(e) {
             if (inputDesc.value === "" || inputDueDate.value === "") return;
             e.preventDefault();
             user.addTask(inputDesc.value, inputDueDate.value, selectPriority.value, btnId);
-            dialogAddTask.close();
-            formTask.reset();
-            profile = user.refresh();
-            renderAndRefresh();
+            refresh(dialogAddTask, formTask);
+        }
+
+        // Event PROJECT ADD
+        const btnAddProjectConfirm = document.querySelector("#btn-project-add");
+        const inputTitle = document.querySelector("#title");
+
+        btnAddProjectConfirm.onclick = function(e) {
+            if (inputTitle.value === "") return;
+            e.preventDefault();
+            user.addProject(inputTitle.value);
+            refresh(dialogAddProject, formProject);
         }
     }
 
@@ -78,7 +92,7 @@ const page = (() => {
 
     function toggleAndRender(el) {
         toggleClass(el, "active");
-        renderAndRefresh();
+        renderAndRefreshListener();
     }
 
     function toggleClass(target, className) {
@@ -87,15 +101,23 @@ const page = (() => {
         liActive = target;
     }
 
-    function renderAndRefresh() {
+    function refresh(dialog, form) {
+        dialog.close();
+        form.reset();
+        profile = user.refresh();
+        renderAndRefreshListener();
+    }
+
+    function renderAndRefreshListener() {
         main.render(liActive.textContent, profile);
         refreshAddTaskListener();
+        refreshAddProjectListener();
         refreshDeleteTaskListener();
         refreshStatusListener();
     }
 
     function refreshAddTaskListener() {
-        btnAddTasks = document.querySelectorAll(".add-task");
+        const btnAddTasks = document.querySelectorAll(".add-task");
         btnAddTasks.forEach(btn => {
             btn.onclick = function() {
                 dialogAddTask.showModal();
@@ -104,24 +126,33 @@ const page = (() => {
         });
     }
 
+    function refreshAddProjectListener() {
+        const btnAddProject = document.querySelector("#add-project");
+        if (btnAddProject !== null) {
+            btnAddProject.onclick = function() {
+                dialogAddProject.showModal();
+            }
+        }
+    }
+
     function refreshDeleteTaskListener() {
-        btnDeleteTasks = document.querySelectorAll(".delete-task");
+        const btnDeleteTasks = document.querySelectorAll(".delete-task");
         btnDeleteTasks.forEach(btn => {
             btn.onclick = function() {
                 user.deleteTask(btn.id);
                 profile = user.refresh();
-                renderAndRefresh();
+                renderAndRefreshListener();
             }
         });
     }
 
     function refreshStatusListener() {
-        checkBoxesStatus = document.querySelectorAll(".status");
+        const checkBoxesStatus = document.querySelectorAll(".status");
         checkBoxesStatus.forEach(box => {
             box.onclick = function() {
                 user.setTaskStatus(box.id, box.checked);
                 profile = user.refresh();
-                renderAndRefresh();
+                renderAndRefreshListener();
             }
         });
     }

@@ -18,8 +18,14 @@
     gap: 20px;
 }
 
-#title {
+.title {
     font-size: 18px;
+}
+
+#main-content {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
 }
 
 .project {
@@ -130,11 +136,13 @@ input.status {
 }
 
 /* ADD TASK */
-.add-task-wrapper {
+.add-task-wrapper,
+.add-project-wrapper {
     height: var(--height-add-task);
 }
 
-.add-task {
+.add-task,
+#add-project {
     height: 1.5rem;
     background-color: transparent;
     color: var(--color-brand);
@@ -144,12 +152,14 @@ input.status {
     font-style: italic;
 }
 
-.add-task:hover {
+.add-task:hover,
+#add-project:hover {
     cursor: pointer;
     font-weight: bold;
 }
 
-.add-task:active {
+.add-task:active,
+#add-project:active {
     font-size: calc(1rem - 1px);
 }
 
@@ -157,6 +167,18 @@ input.status {
 ::backdrop {
     background-color: black;
     opacity: 25%;
+}
+
+dialog {
+    border: none;
+    box-shadow: 0 0 10px var(--color-brand);
+    border-radius: 10px;
+    padding: 20px;
+
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
 }
 
 dialog input,
@@ -169,19 +191,7 @@ dialog select {
     padding: 0 1rem;
 }
 
-#dialog-add-task {
-    border: none;
-    box-shadow: 0 0 10px var(--color-brand);
-    border-radius: 10px;
-    padding: 20px;
-
-    position: fixed;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-}
-
-#form-add-task {
+form {
     display: flex;
     gap: 10px;
 }
@@ -192,7 +202,8 @@ dialog select {
     flex-direction: column;
 }
 
-#btn-task-add {
+#btn-task-add,
+#btn-project-add {
     height: 2rem;
     width: 5rem;
     font-size: 1rem;
@@ -206,29 +217,33 @@ dialog select {
     align-self: flex-end;
 }
 
-#btn-task-add:hover {
+#btn-task-add:hover,
+#btn-project-add:hover {
     box-shadow: 0 0 10px var(--color-brand);
 }
 
-#close-wrapper {
+.close-wrapper {
     margin-bottom: 10px;
     font-size: 18px;
     display: flex;
     justify-content: space-between;
 }
 
-#btn-task-close {
+#btn-task-close,
+#btn-project-close {
     border: none;
     background-color: transparent;
     color: red;
     font-size: 18px;
 }
 
-#btn-task-close:hover {
+#btn-task-close:hover,
+#btn-project-close:hover {
     text-shadow: 0 0 10px red;
 }
 
-#btn-task-close:active {
+#btn-task-close:active
+#btn-project-close:active {
     text-shadow: 0 0 1px red;
     font-size: 17px;
 }

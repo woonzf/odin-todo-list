@@ -35,6 +35,11 @@ const user = (() => {
         user.projects[index].tasks.push(task);
     }
 
+    function addProject(title) {
+        const project = new Project(title, user.projects);
+        user.projects.push(project);
+    }
+
     function deleteTask(id) {
         const indexProject = getIndex(user.projects, getProjectId(id));
         const indexTask = getIndex(user.projects[indexProject].tasks, getTaskId(id));
@@ -100,7 +105,7 @@ const user = (() => {
         return parseInt(id.split("-")[2]);
     }
 
-    return { init, refresh, addTask, deleteTask, setTaskStatus };
+    return { init, refresh, addTask, addProject, deleteTask, setTaskStatus };
 })()
 
 export { user }

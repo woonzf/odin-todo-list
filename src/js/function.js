@@ -55,10 +55,10 @@ function createLabel(text) {
     return label;
 };
 
-function createButton(text, id) {
+function createButtonId(text, id) {
     const btn = document.createElement("button");
     btn.append(text);
-    if (id !== null) btn.id = id;
+    btn.id = id;
     return btn;
 }
 
@@ -106,5 +106,5 @@ function getTodayString(arr) {
 }
 
 export { createText, createImg, createEmptyDivId, createEmptyDivClass, 
-    createInputWithLabel, createSelectWithLabel, createButton, getDaysLeft, 
+    createInputWithLabel, createSelectWithLabel, createButtonId, getDaysLeft, 
     displayDaysLeft }

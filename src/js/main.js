@@ -1,4 +1,4 @@
-import { createButton, createEmptyDivClass, createEmptyDivId, createImg, 
+import { createButtonId, createEmptyDivClass, createEmptyDivId, createImg, 
     createInputWithLabel, createSelectWithLabel, createText, displayDaysLeft, 
     getDaysLeft } from './function';
 
@@ -11,11 +11,12 @@ const main = (() => {
     const priority = ["Low", "Medium", "High"];
 
     function init() {
-        title = createEmptyDivId("title");
+        title = createEmptyDivClass("title");
         mainContent = createEmptyDivId("main-content");
         const dialogAddTask = createDialogAddTask();
+        const dialogAddProject = createDialogAddProject();
         const div = createEmptyDivId("main");
-        div.append(title, mainContent, dialogAddTask);
+        div.append(title, mainContent, dialogAddTask, dialogAddProject);
         return div;
     }
 
@@ -23,7 +24,7 @@ const main = (() => {
         const inputDesc = createInputWithLabel("Description", "text", "first");
         const inputDueDate = createInputWithLabel("Due Date", "date");
         const inputPriority = createSelectWithLabel("Priority", priority);
-        const btnAdd = createButton("Add", "btn-task-add");
+        const btnAdd = createButtonId("Add", "btn-task-add");
         btnAdd.type = "submit";
         
         const form = document.createElement("form");
@@ -31,13 +32,34 @@ const main = (() => {
         form.id = "form-add-task";
         form.append(inputDesc, inputDueDate, inputPriority, btnAdd);
         
-        const text = createText("Add a Task");
-        const btnClose = createButton("X", "btn-task-close");
-        const closeWrapper = createEmptyDivId("close-wrapper");
+        const text = createText("New Task");
+        const btnClose = createButtonId("X", "btn-task-close");
+        const closeWrapper = createEmptyDivClass("close-wrapper");
         closeWrapper.append(text, btnClose);
 
         const dialog = document.createElement("dialog");
         dialog.id = "dialog-add-task";
+        dialog.append(closeWrapper, form);
+        return dialog;
+    }
+
+    function createDialogAddProject() {
+        const inputTitle = createInputWithLabel("Title", "text", "first");
+        const btnAdd = createButtonId("Add", "btn-project-add");
+        btnAdd.type = "submit";
+        
+        const form = document.createElement("form");
+        form.method = "dialog";
+        form.id = "form-add-project";
+        form.append(inputTitle, btnAdd);
+        
+        const text = createText("New Project");
+        const btnClose = createButtonId("X", "btn-project-close");
+        const closeWrapper = createEmptyDivClass("close-wrapper");
+        closeWrapper.append(text, btnClose);
+
+        const dialog = document.createElement("dialog");
+        dialog.id = "dialog-add-project";
         dialog.append(closeWrapper, form);
         return dialog;
     }
@@ -47,6 +69,7 @@ const main = (() => {
         clear(mainContent);
         const info = getInfo(category, profile);
         for (const item of info) mainContent.append(item);
+        if (category === "My Projects") mainContent.append(createAddProject());
     }
 
     function clear(el) {
@@ -126,7 +149,7 @@ const main = (() => {
         
         // Delete
         const signDelete = createImg(iconDelete, "Delete Icon");
-        const btnDelete = createButton(signDelete, `t-${task.projectId}-${task.id}`);
+        const btnDelete = createButtonId(signDelete, `t-${task.projectId}-${task.id}`);
         btnDelete.classList.add("delete-task");
 
         signDelete.onmouseover = function() { signDelete.src = iconDeleteHover; }
@@ -149,9 +172,16 @@ const main = (() => {
     }
 
     function createAddTask(id) {
-        const button = createButton("+ Add Task", `p-${id}`);
-        button.classList.add ("add-task");
+        const button = createButtonId("+ Add Task", `p-${id}`);
+        button.classList.add("add-task");
         const div = createEmptyDivClass("add-task-wrapper");
+        div.append(button);
+        return div;
+    }
+
+    function createAddProject() {
+        const button = createButtonId("+ Add Project", "add-project");
+        const div = createEmptyDivClass("add-project-wrapper");
         div.append(button);
         return div;
     }
