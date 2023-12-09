@@ -113,6 +113,7 @@ const page = (() => {
         refreshAddTaskListener();
         refreshAddProjectListener();
         refreshDeleteTaskListener();
+        refreshDeleteProjectListener();
         refreshStatusListener();
     }
 
@@ -139,7 +140,18 @@ const page = (() => {
         const btnDeleteTasks = document.querySelectorAll(".delete-task");
         btnDeleteTasks.forEach(btn => {
             btn.onclick = function() {
-                user.deleteTask(btn.id);
+                user.deleteItem("task", btn.id);
+                profile = user.refresh();
+                renderAndRefreshListener();
+            }
+        });
+    }
+
+    function refreshDeleteProjectListener() {
+        const btnDeleteProjects = document.querySelectorAll(".delete-project");
+        btnDeleteProjects.forEach(btn => {
+            btn.onclick = function() {
+                user.deleteItem("project", btn.id);
                 profile = user.refresh();
                 renderAndRefreshListener();
             }

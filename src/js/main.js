@@ -79,37 +79,71 @@ const main = (() => {
     function getInfo(category, profile) {
         switch(category) {
             case "Today":
-                return [createText("</>")];
+                return getTasksAll("today", profile);
             case "Upcoming":
-                return [createText("</>")];
+                return getTasksAll("upcoming", profile);
             case "My Projects":
-                return getProjects(profile);
+                return getProjectsAll(profile);
         }
     }
 
-    function getProjects(profile) {
+    function getTasksAll(type, profile) {
+        const div = createEmptyDivClass("project");
+        for (const project of profile.projects) {
+            for (const task of project.tasks) {
+                switch(type) {
+                    case "today":
+                        if (getDaysLeft(task.dueDate) === 0) div.append(createTask(task, project.title));
+                        break;
+                    case "upcoming":
+                        if (getDaysLeft(task.dueDate) > 0) div.append(createTask(task, project.title));
+                        break;
+                    default:
+                        break;
+                }
+            }
+        }
+        if (div.children.length === 0) {
+            switch(type) {
+                case "today":
+                    div.textContent = "No task today!";
+                    break;
+                case "upcoming":
+                    div.textContent = "No upcoming task!";
+                    break;
+                default:
+                    break;
+            }
+        }
+        return [div];
+    }
+
+    function getProjectsAll(profile) {
         let list = [];
         for (const project of profile.projects) {
-            const divProject = createProject(project.title);
+            const divProject = createProject(project.title, project.id);
             const divTasks = createEmptyDivClass("project-task");
             if (project.tasks.length === 0) divTasks.append(createText("No task found."));
-            else for (const task of project.tasks) divTasks.append(createTask(task));
+            else for (const task of project.tasks) divTasks.append(createTask(task, null));
             divProject.append(divTasks, createAddTask(project.id));
             list.push(divProject);
         }
         return list;
     }
 
-    function createProject(title) {
+    function createProject(titleName, id) {
+        const title = createText(titleName);
+        const btnDelete = createDeleteButton(`p-${id}`, "delete-project");
         const divTitle = createEmptyDivClass("project-title");
-        divTitle.textContent = title;
+        divTitle.append(title, btnDelete);
+
         const divider = createEmptyDivClass("divider");
         const div = createEmptyDivClass("project");
         div.append(divTitle, divider);
         return div;
     }
 
-    function createTask(task) {
+    function createTask(task, title) {
         // Status
         const checkBox = document.createElement("input");
         checkBox.type = "checkbox";
@@ -126,38 +160,49 @@ const main = (() => {
         const divInfo = createEmptyDivClass("task-info");
         divInfo.append(checkBox, desc);
         
-        // Days Left
-        const daysLeft = createEmptyDivClass("days-left");
-        const intDaysLeft = getDaysLeft(task.dueDate);
-        daysLeft.textContent = displayDaysLeft(intDaysLeft);
-
-        // Due date
-        const dueDate = createEmptyDivClass("due-date");
-        dueDate.textContent = "Due: " + task.dueDate;
-
-        // Check for Status
-        if (task.status === false) {
-            if (intDaysLeft < 0) daysLeft.classList.add("overdue");
-        } else {
-            daysLeft.classList.add("hidden");
-            dueDate.classList.add("hidden");
-            desc.classList.add("cross");
-            const div = createEmptyDivClass("done");
-            div.textContent = "DONE";
-            divInfo.append(div);
-        }
-        
         // Delete
-        const signDelete = createImg(iconDelete, "Delete Icon");
-        const btnDelete = createButtonId(signDelete, `t-${task.projectId}-${task.id}`);
-        btnDelete.classList.add("delete-task");
-
-        signDelete.onmouseover = function() { signDelete.src = iconDeleteHover; }
-        signDelete.onmouseout = function() { signDelete.src = iconDelete; }
+        const btnDelete = createDeleteButton(`t-${task.projectId}-${task.id}`, "delete-task");
 
         // End
         const divEnd = createEmptyDivClass("task-end");
-        divEnd.append(daysLeft, dueDate, btnDelete);
+
+        if (title === null) {
+            // Days Left
+            const daysLeft = createEmptyDivClass("days-left");
+            const intDaysLeft = getDaysLeft(task.dueDate);
+            daysLeft.textContent = displayDaysLeft(intDaysLeft);
+
+            // Due date
+            const dueDate = createEmptyDivClass("due-date");
+            dueDate.textContent = "Due: " + task.dueDate;
+
+            // Check for Status
+            if (task.status === false) {
+                if (intDaysLeft < 0) daysLeft.classList.add("overdue");
+            } else {
+                daysLeft.classList.add("hidden");
+                dueDate.classList.add("hidden");
+                desc.classList.add("cross");
+                const div = createEmptyDivClass("done");
+                div.textContent = "DONE";
+                divInfo.append(div);
+            }
+
+            divEnd.append(daysLeft, dueDate, btnDelete);
+        } else {
+            const project = createEmptyDivClass("from");
+            project.textContent = `~ ${title}`;
+
+            // Check for Status
+            if (task.status === true) {
+                desc.classList.add("cross");
+                const div = createEmptyDivClass("done");
+                div.textContent = "DONE";
+                divInfo.append(div);
+            }
+
+            divEnd.append(project, btnDelete);
+        }
 
         // Task
         const divTask = createEmptyDivClass("task");
@@ -172,7 +217,7 @@ const main = (() => {
     }
 
     function createAddTask(id) {
-        const button = createButtonId("+ Add Task", `p-${id}`);
+        const button = createButtonId("+ Add Task", `tp-${id}`);
         button.classList.add("add-task");
         const div = createEmptyDivClass("add-task-wrapper");
         div.append(button);
@@ -184,6 +229,17 @@ const main = (() => {
         const div = createEmptyDivClass("add-project-wrapper");
         div.append(button);
         return div;
+    }
+
+    function createDeleteButton(id, className) {
+        const signDelete = createImg(iconDelete, "Delete Icon");
+        const btnDelete = createButtonId(signDelete, id);
+        btnDelete.classList.add(className);
+
+        signDelete.onmouseover = function() { signDelete.src = iconDeleteHover; }
+        signDelete.onmouseout = function() { signDelete.src = iconDelete; }
+
+        return btnDelete;
     }
 
     return { init, render }

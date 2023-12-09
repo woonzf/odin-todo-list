@@ -38,6 +38,12 @@
     gap: 20px;
 }
 
+.project-title {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
 .divider {
     width: 100%;
     border-bottom: 1px solid grey;
@@ -107,6 +113,10 @@ input.status {
     width: 14ch;
 }
 
+.from {
+    width: 20ch;
+}
+
 .overdue {
     color: var(--red);
 }
@@ -124,13 +134,15 @@ input.status {
     font-style: italic;
 }
 
-.delete-task {
+.delete-task,
+.delete-project {
     height: fit-content;
     border: none;
     background-color: transparent;
 }
 
-.delete-task > img {
+.delete-task > img,
+.delete-project > img {
     height: 24px;
     display: flex;
 }

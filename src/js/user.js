@@ -40,10 +40,20 @@ const user = (() => {
         user.projects.push(project);
     }
 
-    function deleteTask(id) {
+    function deleteItem(type, id) {
         const indexProject = getIndex(user.projects, getProjectId(id));
-        const indexTask = getIndex(user.projects[indexProject].tasks, getTaskId(id));
-        user.projects[indexProject].tasks.splice(indexTask, 1);
+
+        switch(type) {
+            case "task":
+                const indexTask = getIndex(user.projects[indexProject].tasks, getTaskId(id));
+                user.projects[indexProject].tasks.splice(indexTask, 1);
+                break;
+            case "project":
+                user.projects.splice(indexProject, 1);
+                break;
+            default:
+                break;
+        }
     }
 
     function setTaskStatus(id, status) {
@@ -105,7 +115,7 @@ const user = (() => {
         return parseInt(id.split("-")[2]);
     }
 
-    return { init, refresh, addTask, addProject, deleteTask, setTaskStatus };
+    return { init, refresh, addTask, addProject, deleteItem, setTaskStatus };
 })()
 
 export { user }
