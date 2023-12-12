@@ -7,24 +7,24 @@ import iconProject from '../img/book-multiple-outline-custom.png';
 
 const sideBar = (() => {
     function init() {
-        const brand = createBrand();
-        const user = createProfile();
-        const menu = createMenu(getMenuList());
+        const brand = _createBrand();
+        const user = _createProfile();
+        const menu = _createMenu(_getMenuList());
         
         const div = createEmptyDivId("side-bar");
         div.append(brand, user, menu);
         return div;
     }
 
-    function getMenuList() {
+    function _getMenuList() {
         return [
-            new MenuItem("Today", iconToday, "Calendar Icon"),
-            new MenuItem("Upcoming", iconUpcoming, "Calendar with Dots Icon"),
-            new MenuItem("My Projects", iconProject, "Multiple Book Icon"),
+            new _MenuItem("Today", iconToday, "Calendar Icon"),
+            new _MenuItem("Upcoming", iconUpcoming, "Calendar with Dots Icon"),
+            new _MenuItem("My Projects", iconProject, "Multiple Book Icon"),
         ];
     }
 
-    class MenuItem {
+    class _MenuItem {
         constructor (name, src, alt) {
             this.name = name;
             this.src = src;
@@ -36,7 +36,7 @@ const sideBar = (() => {
         }
     }
     
-    function createBrand() {
+    function _createBrand() {
         const icon = createImg(iconTodo, "Todo Icon");
         const name = createText("todo list");
         const div = createEmptyDivId("brand");
@@ -44,7 +44,7 @@ const sideBar = (() => {
         return div;
     }
 
-    function createProfile() {
+    function _createProfile() {
         const img = createImg("", "");
         const name = createText("");
         const div = createEmptyDivId("profile");
@@ -52,17 +52,17 @@ const sideBar = (() => {
         return div;
     }
 
-    function createMenu(list) {
+    function _createMenu(list) {
         const ul = document.createElement("ul");
         ul.id = "menu";
         for (const item of list) {
-            const li = createMenuItem(item);
+            const li = _createMenuItem(item);
             ul.append(li);
         }
         return ul;
     }
 
-    function createMenuItem(item) {
+    function _createMenuItem(item) {
         const img = createImg(item.src, item.alt);
         const div = createText(item.name);
         const li = document.createElement("li");
@@ -71,7 +71,16 @@ const sideBar = (() => {
         return li;
     }
 
-    return { init }
+    function setProfile(profile) {
+        const div = document.querySelector("#profile");
+        const img = div.querySelector("img");
+        const name = div.querySelector("div");
+        img.src = profile.icon.src;
+        img.alt = profile.icon.alt;
+        name.textContent = profile.name;
+    }
+
+    return { init, setProfile }
 })()
 
 export { sideBar }

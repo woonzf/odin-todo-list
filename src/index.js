@@ -16,15 +16,15 @@ const page = (() => {
 
     function init() {
         document.title = "Todo List";
-        initLayout();
-        initProfile();
-        setMenuIdDefault("today");
+        _initLayout();
+        _initProfile();
+        _setMenuIdDefault("today");
 
         // Event SIDE BAR
         const liMenu = document.querySelectorAll("#menu > li");
         liMenu.forEach(li => {
             li.onclick = function() {
-                toggleAndRender(li);
+                _toggleAndRender(li);
             }
         });
 
@@ -56,7 +56,7 @@ const page = (() => {
             if (inputDesc.value === "" || inputDueDate.value === "") return;
             e.preventDefault();
             user.addTask(inputDesc.value, inputDueDate.value, selectPriority.value, btnId);
-            refresh(dialogAddTask, formTask);
+            _refresh(dialogAddTask, formTask);
         }
 
         // Event PROJECT ADD
@@ -67,57 +67,53 @@ const page = (() => {
             if (inputTitle.value === "") return;
             e.preventDefault();
             user.addProject(inputTitle.value);
-            refresh(dialogAddProject, formProject);
+            _refresh(dialogAddProject, formProject);
         }
     }
 
-    function initLayout() {
+    function _initLayout() {
         content.append(sideBar.init(), main.init());
     }
 
-    function initProfile() {
-        profile = user.init();
-        const div = document.querySelector("#profile");
-        const img = div.querySelector("img");
-        const name = div.querySelector("div");
-        img.src = profile.icon.src;
-        img.alt = profile.icon.alt;
-        name.textContent = profile.name;
+    function _initProfile() {
+        user.init();
+        profile = user.refresh();
+        sideBar.setProfile(profile);
     }
 
-    function setMenuIdDefault(text) {
+    function _setMenuIdDefault(text) {
         const li = document.querySelector(`#${text}`);
-        toggleAndRender(li);
+        _toggleAndRender(li);
     }
 
-    function toggleAndRender(el) {
-        toggleClass(el, "active");
-        renderAndRefreshListener();
+    function _toggleAndRender(el) {
+        _toggleClass(el, "active");
+        _renderAndRefreshListener();
     }
 
-    function toggleClass(target, className) {
+    function _toggleClass(target, className) {
         if (liActive !== null) liActive.classList.remove(className);
         target.classList.add(className);
         liActive = target;
     }
 
-    function refresh(dialog, form) {
+    function _refresh(dialog, form) {
         dialog.close();
         form.reset();
         profile = user.refresh();
-        renderAndRefreshListener();
+        _renderAndRefreshListener();
     }
 
-    function renderAndRefreshListener() {
+    function _renderAndRefreshListener() {
         main.render(liActive.textContent, profile);
-        refreshAddTaskListener();
-        refreshAddProjectListener();
-        refreshDeleteTaskListener();
-        refreshDeleteProjectListener();
-        refreshStatusListener();
+        _refreshAddTaskListener();
+        _refreshAddProjectListener();
+        _refreshDeleteTaskListener();
+        _refreshDeleteProjectListener();
+        _refreshStatusListener();
     }
 
-    function refreshAddTaskListener() {
+    function _refreshAddTaskListener() {
         const btnAddTasks = document.querySelectorAll(".add-task");
         btnAddTasks.forEach(btn => {
             btn.onclick = function() {
@@ -127,7 +123,7 @@ const page = (() => {
         });
     }
 
-    function refreshAddProjectListener() {
+    function _refreshAddProjectListener() {
         const btnAddProject = document.querySelector("#add-project");
         if (btnAddProject !== null) {
             btnAddProject.onclick = function() {
@@ -136,35 +132,35 @@ const page = (() => {
         }
     }
 
-    function refreshDeleteTaskListener() {
+    function _refreshDeleteTaskListener() {
         const btnDeleteTasks = document.querySelectorAll(".delete-task");
         btnDeleteTasks.forEach(btn => {
             btn.onclick = function() {
                 user.deleteItem("task", btn.id);
                 profile = user.refresh();
-                renderAndRefreshListener();
+                _renderAndRefreshListener();
             }
         });
     }
 
-    function refreshDeleteProjectListener() {
+    function _refreshDeleteProjectListener() {
         const btnDeleteProjects = document.querySelectorAll(".delete-project");
         btnDeleteProjects.forEach(btn => {
             btn.onclick = function() {
                 user.deleteItem("project", btn.id);
                 profile = user.refresh();
-                renderAndRefreshListener();
+                _renderAndRefreshListener();
             }
         });
     }
 
-    function refreshStatusListener() {
+    function _refreshStatusListener() {
         const checkBoxesStatus = document.querySelectorAll(".status");
         checkBoxesStatus.forEach(box => {
             box.onclick = function() {
                 user.setTaskStatus(box.id, box.checked);
                 profile = user.refresh();
-                renderAndRefreshListener();
+                _renderAndRefreshListener();
             }
         });
     }
