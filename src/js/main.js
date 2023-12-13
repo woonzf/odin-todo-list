@@ -13,14 +13,14 @@ const main = (() => {
     function init() {
         title = createEmptyDivClass("title");
         mainContent = createEmptyDivId("main-content");
-        const dialogAddTask = createDialogAddTask();
-        const dialogAddProject = createDialogAddProject();
+        const dialogAddTask = _createDialogAddTask();
+        const dialogAddProject = _createDialogAddProject();
         const div = createEmptyDivId("main");
         div.append(title, mainContent, dialogAddTask, dialogAddProject);
         return div;
     }
 
-    function createDialogAddTask() {
+    function _createDialogAddTask() {
         const inputDesc = createInputWithLabel("Description", "text", "first");
         const inputDueDate = createInputWithLabel("Due Date", "date");
         const inputPriority = createSelectWithLabel("Priority", priority);
@@ -43,7 +43,7 @@ const main = (() => {
         return dialog;
     }
 
-    function createDialogAddProject() {
+    function _createDialogAddProject() {
         const inputTitle = createInputWithLabel("Title", "text", "first");
         const btnAdd = createButtonId("Add", "btn-project-add");
         btnAdd.type = "submit";
@@ -66,37 +66,37 @@ const main = (() => {
 
     function render(category, profile) {
         title.textContent = category;
-        clear(mainContent);
-        const info = getInfo(category, profile);
+        _clear(mainContent);
+        const info = _getInfo(category, profile);
         for (const item of info) mainContent.append(item);
-        if (category === "My Projects") mainContent.append(createAddProject());
+        if (category === "My Projects") mainContent.append(_createAddProject());
     }
 
-    function clear(el) {
+    function _clear(el) {
         while (el.children.length > 0) el.removeChild(el.lastChild);
     }
 
-    function getInfo(category, profile) {
+    function _getInfo(category, profile) {
         switch(category) {
             case "Today":
-                return getTasksAll("today", profile);
+                return _getTasksAll("today", profile);
             case "Upcoming":
-                return getTasksAll("upcoming", profile);
+                return _getTasksAll("upcoming", profile);
             case "My Projects":
-                return getProjectsAll(profile);
+                return _getProjectsAll(profile);
         }
     }
 
-    function getTasksAll(type, profile) {
+    function _getTasksAll(type, profile) {
         const div = createEmptyDivClass("project");
         for (const project of profile.projects) {
             for (const task of project.tasks) {
                 switch(type) {
                     case "today":
-                        if (getDaysLeft(task.dueDate) === 0) div.append(createTask(task, project.title));
+                        if (getDaysLeft(task.dueDate) === 0) div.append(_createTask(task, project.title));
                         break;
                     case "upcoming":
-                        if (getDaysLeft(task.dueDate) > 0) div.append(createTask(task, project.title));
+                        if (getDaysLeft(task.dueDate) > 0) div.append(_createTask(task, project.title));
                         break;
                     default:
                         break;
@@ -118,22 +118,22 @@ const main = (() => {
         return [div];
     }
 
-    function getProjectsAll(profile) {
+    function _getProjectsAll(profile) {
         let list = [];
         for (const project of profile.projects) {
-            const divProject = createProject(project.title, project.id);
+            const divProject = _createProject(project.title, project.id);
             const divTasks = createEmptyDivClass("project-task");
             if (project.tasks.length === 0) divTasks.append(createText("No task found."));
-            else for (const task of project.tasks) divTasks.append(createTask(task, null));
-            divProject.append(divTasks, createAddTask(project.id));
+            else for (const task of project.tasks) divTasks.append(_createTask(task, null));
+            divProject.append(divTasks, _createAddTask(project.id));
             list.push(divProject);
         }
         return list;
     }
 
-    function createProject(titleName, id) {
+    function _createProject(titleName, id) {
         const title = createText(titleName);
-        const btnDelete = createDeleteButton(`p-${id}`, "delete-project");
+        const btnDelete = _createDeleteButton(`p-${id}`, "delete-project");
         const divTitle = createEmptyDivClass("project-title");
         divTitle.append(title, btnDelete);
 
@@ -143,7 +143,7 @@ const main = (() => {
         return div;
     }
 
-    function createTask(task, title) {
+    function _createTask(task, title) {
         // Status
         const checkBox = document.createElement("input");
         checkBox.type = "checkbox";
@@ -159,19 +159,19 @@ const main = (() => {
         // Info
         const divInfo = createEmptyDivClass("task-info");
         divInfo.append(checkBox, desc);
-        
+
+        // Days Left
+        const daysLeft = createEmptyDivClass("days-left");
+        const intDaysLeft = getDaysLeft(task.dueDate);
+        daysLeft.textContent = displayDaysLeft(intDaysLeft);
+
         // Delete
-        const btnDelete = createDeleteButton(`t-${task.projectId}-${task.id}`, "delete-task");
+        const btnDelete = _createDeleteButton(`t-${task.projectId}-${task.id}`, "delete-task");
 
         // End
         const divEnd = createEmptyDivClass("task-end");
 
         if (title === null) {
-            // Days Left
-            const daysLeft = createEmptyDivClass("days-left");
-            const intDaysLeft = getDaysLeft(task.dueDate);
-            daysLeft.textContent = displayDaysLeft(intDaysLeft);
-
             // Due date
             const dueDate = createEmptyDivClass("due-date");
             dueDate.textContent = "Due: " + task.dueDate;
@@ -201,22 +201,23 @@ const main = (() => {
                 divInfo.append(div);
             }
 
-            divEnd.append(project, btnDelete);
+            if (intDaysLeft > 0) divEnd.append(daysLeft, project, btnDelete);
+            else divEnd.append(project, btnDelete);
         }
 
         // Task
         const divTask = createEmptyDivClass("task");
         divTask.append(divInfo, divEnd);
-        divTask.classList.add(getPriorityClass(task.priority));
+        divTask.classList.add(_getPriorityClass(task.priority));
         divTask.id = `t-${task.id}`;
         return divTask;
     }
 
-    function getPriorityClass(priority) {
+    function _getPriorityClass(priority) {
         return priority.toLowerCase();
     }
 
-    function createAddTask(id) {
+    function _createAddTask(id) {
         const button = createButtonId("+ Add Task", `tp-${id}`);
         button.classList.add("add-task");
         const div = createEmptyDivClass("add-task-wrapper");
@@ -224,14 +225,14 @@ const main = (() => {
         return div;
     }
 
-    function createAddProject() {
+    function _createAddProject() {
         const button = createButtonId("+ Add Project", "add-project");
         const div = createEmptyDivClass("add-project-wrapper");
         div.append(button);
         return div;
     }
 
-    function createDeleteButton(id, className) {
+    function _createDeleteButton(id, className) {
         const signDelete = createImg(iconDelete, "Delete Icon");
         const btnDelete = createButtonId(signDelete, id);
         btnDelete.classList.add(className);
