@@ -98,13 +98,6 @@ function getTodayArr() {
     return `${year}-${month}-${date}`;
 }
 
-function getTodayString(arr) {
-    const monthList = ["January", "February", "March", "April", "May", "June",
-        "July", "August", "September", "October", "November", "December"];
-    const month = monthList[arr[1] - 1].toUpperCase();
-    return `${arr[2]} ${month} ${arr[0]}`;
-}
-
 export { createText, createImg, createEmptyDivId, createEmptyDivClass, 
     createInputWithLabel, createSelectWithLabel, createButtonId, getDaysLeft, 
     displayDaysLeft }
