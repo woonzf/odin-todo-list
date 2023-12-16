@@ -26,8 +26,8 @@ const user = (() => {
     }
 
     function _registerUser() {
-        let name = "John";
-        // while (name === "") name = prompt("Welcome, what is your name?");
+        let name = "";
+        while (name === "") name = prompt("Welcome, what is your name?");
         return _createUser(name);
     }
 
